@@ -23,25 +23,24 @@ app.get("/", (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-  console.log("register api called")
-    const {name, email,mobile, password} = req;
-    const oldUser = await User.findOne({email:email});
-    if(oldUser){
-        return res.send({data: "User is already exists!!"})
-    }
-    try{
-        await User.create({
-            name:name,
-            email:email,
-            mobile:mobile,
-            password:password
-        });
-        console.log("User Created")
-        res.send({status: "ok", data: "User Created"});
-    }   
-    catch(error){
-        res.send({status: "error", data: error});
-    }
+  console.log("register api called");
+  const { name, email, mobile, password } = req.body;
+  const oldUser = await User.findOne({ email: email });
+  if (oldUser) {
+    return res.send({ data: oldUser.name + " User is already exists!!" });
+  }
+  try {
+    await User.create({
+      name: name,
+      email: email,
+      mobile: mobile,
+      password: password,
+    });
+    console.log("User Created");
+    res.send({ status: "ok", data: "User Created" });
+  } catch (error) {
+    res.send({ status: "error", data: error });
+  }
 });
 
 app.listen(9000, () => {
